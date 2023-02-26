@@ -18,6 +18,12 @@ The PyTorch setup varies a bit depending on the OS, see [here](https://pytorch.o
 
     python -c "import torch; print(torch.__version__)"
 
+To confirm that all required packages haven been installed corretly, list them with:
+
+    pip list
+
+Take a screenshot of the package list in your terminal window for Part 1. 
+
 ## Part 1
 
 For the second part of this assignment, we want you to think about the motivation for Deep Learning. - i.e. What are the benefits of using deep artificial neural networks?
@@ -25,6 +31,7 @@ Write a short abstract (1 page max) that should cover the following:
 
 * What do you think are the advantages of Deep Learning compared to traditional, or classical Machine Learning methods?
 * Give at least one real-world application example of Deep Learning in Visual Computing that you find interesting/impressive and explain why. Provide references! 
+* Include a screenshot of your package list from Part 0. 
 
 Submit your assignment as .pdf file in TUWEL until __March 15__.
 
