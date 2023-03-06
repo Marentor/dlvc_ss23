@@ -4,7 +4,7 @@ The following applies to all assignments unless stated otherwise in the correspo
 
 ## Assignments
 
-In total there will be three assignments. Instructions for the assignments will be released in parts every 1-2 weeks depending on the effort required to solve them and on how fast the lecture progresses. It is recommended that you follow along with your solutions instead of blocking them all until the end. Each assignment deadline will be announced with the release of the final part (at least 2 weeks before the deadline).   
+In total there will be four assignments. Instructions for the assignments will be released in parts every 1-2 weeks depending on the effort required to solve them and on how fast the lecture progresses. It is recommended that you follow along with your solutions instead of blocking them all until the end. Each assignment deadline will be announced with the release of the final part (at least 2 weeks before the deadline).   
 
 ## Submission
 
