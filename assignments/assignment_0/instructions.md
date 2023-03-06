@@ -29,6 +29,6 @@ Write a short abstract (1 page max) that should cover the following:
 * Give at least one real-world application example of Deep Learning in Visual Computing that you find interesting/impressive and explain why. Provide references! 
 * Include a screenshot of your package list from Part 0. 
 
-Submit your assignment as .pdf file in TUWEL until __March 15__.
+Submit your assignment as .pdf file in TUWEL until __March 14 11pm__.
 
 
