@@ -6,7 +6,7 @@ This text or the reference code might not be without errors. If you find a signi
 
 ## Part 1
 
-Download the reference code from [here](https://smithers.cvl.tuwien.ac.at/jstrohmayer/dlvc_ss22/-/tree/main/assignments/reference), making sure that the file structure is preserved, and rename the root folder to something other than `reference`. Read the code and make sure that you understand what the individual classes and methods are doing.
+Download the reference code from [here](https://smithers.cvl.tuwien.ac.at/jstrohmayer/dlvc_ss23/-/tree/main/assignments/reference), making sure that the file structure is preserved, and rename the root folder to something other than `reference`. Read the code and make sure that you understand what the individual classes and methods are doing.
 
 [Download](https://www.cs.toronto.edu/~kriz/cifar.html) and extract the *Python* version of the CIFAR10 dataset somewhere *outside* the code folder. Read the website to understand which classes there are and how the data are structured and read.
 
