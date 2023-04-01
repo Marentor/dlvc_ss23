@@ -24,8 +24,11 @@ def type_cast(dtype: np.dtype) -> Op:
     '''
 
     # TODO implement (see above for guidance).
+    def op(sample: np.ndarray) -> np.ndarray:
+        sample = sample.astype(dtype)
+        return sample
 
-    pass
+    return op
 
 def vectorize() -> Op:
     '''
@@ -33,8 +36,11 @@ def vectorize() -> Op:
     '''
 
     # TODO implement (see above for guidance).
+    def op(sample: np.ndarray) -> np.ndarray:
+        sample = np.ravel(sample)
+        return sample
 
-    pass
+    return op
 
 def add(val: float) -> Op:
     '''
@@ -42,8 +48,12 @@ def add(val: float) -> Op:
     '''
 
     # TODO implement (see above for guidance).
+    def op(sample: np.ndarray) -> np.ndarray:
+        sample = sample + val
+        return sample
 
-    pass
+    return op
+
 
 def mul(val: float) -> Op:
     '''
@@ -51,8 +61,11 @@ def mul(val: float) -> Op:
     '''
 
     # TODO implement (see above for guidance).
+    def op(sample: np.ndarray) -> np.ndarray:
+        sample = sample * val
+        return sample
 
-    pass
+    return op
 
 def hwc2chw() -> Op:
     '''
@@ -60,8 +73,11 @@ def hwc2chw() -> Op:
     '''
 
     # TODO implement (see np.transpose)
+    def op(sample: np.ndarray) -> np.ndarray:
+        sample = np.transpose(sample,(3,1,2))
+        return sample
 
-    pass
+    return op
 
 def hflip() -> Op:
     '''
@@ -69,8 +85,12 @@ def hflip() -> Op:
     '''
 
     # TODO implement (numpy.flip will be helpful)
+    def op(sample: np.ndarray) -> np.ndarray:
+        if np.random.random(size=1) > 0.5:
+            sample = np.flip(sample,1) #Does "flip horizontaly" mean flip at the width dimension ?
+        return sample
 
-    pass
+    return op
 
 def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
     '''
@@ -82,5 +102,14 @@ def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
 
     # TODO implement
     # https://numpy.org/doc/stable/reference/generated/numpy.pad.html will be helpful
+    def op(sample: np.ndarray) -> np.ndarray:
+        sample = np.pad(sample,pad,pad_mode)
+        if (sample.shape[0] > sz or sample.shape[1] > sz):
+            raise ValueError
 
-    pass
+        idx_height = np.random.randint(0, sample.shape[0] - sz)
+        idx_width = np.random.randint(0, sample.shape[1] - sz)
+        sample = sample[idx_height: idx_height + sz, idx_width: idx_width + sz, :]
+        return sample
+
+    return op

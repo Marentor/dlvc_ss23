@@ -1,7 +1,11 @@
 import typing
+import numpy as np
+import random
+
 
 from .dataset import Dataset
 from .ops import Op
+
 
 class Batch:
     '''
@@ -38,8 +42,43 @@ class BatchGenerator:
         '''
 
         # TODO implement
+        self.batch_array = []
+        self.n_batches = len(dataset) // num
+        for n_batch in range(self.n_batches):
+            try:
+                d = []
+                l = []
+                idx = []
 
-        pass
+                for i in range(num):
+                    sample = dataset[n_batch*num + i]
+                    if op:
+                        sample.data = op(sample.data)  # is sample immutable ?
+                    d.append(sample.data)
+                    l.append(sample.label)
+                    idx.append(sample.idx)
+            except IndexError:
+                d = []
+                l = []
+                idx = []
+
+                for i in range(num - (len(dataset) % num)):
+                    sample = dataset[n_batch*num + i]
+                    if op:
+                        sample.data = op(sample.data)  # is sample immutable ?
+                    d.append(sample.data)
+                    l.append(sample.label)
+                    idx.append(sample.idx)
+
+            batch = Batch()
+            batch.data = np.array(d)
+            batch.label = np.array(l)
+            batch.idx = np.array([idx])
+            self.batch_array.append(batch)
+            if shuffle:
+                random.shuffle(self.batch_array)
+
+
 
     def __len__(self) -> int:
         '''
@@ -48,8 +87,7 @@ class BatchGenerator:
         '''
 
         # TODO implement
-
-        pass
+        return self.n_batches
 
     def __iter__(self) -> typing.Iterable[Batch]:
         '''
@@ -58,5 +96,8 @@ class BatchGenerator:
 
         # TODO implement
         # The "yield" keyword makes this easier
+
+        for i in range(self.__len__()):
+            yield self.batch_array[i]
 
         pass

@@ -68,9 +68,8 @@ class Accuracy(PerformanceMeasure):
         Resets the internal state.
         '''
 
-        # TODO implement
-
-        pass
+        self.correct = 0
+        self.total = 0
 
     def update(self, prediction: np.ndarray, target: np.ndarray):
         '''
@@ -81,9 +80,22 @@ class Accuracy(PerformanceMeasure):
         Raises ValueError if the data shape or values are unsupported.
         '''
 
-        # TODO implement
+        # TODO change c
+        '''
+        Update the measure by comparing predicted data with ground-truth target data.
+        Raises ValueError if the data shape or values are unsupported.
+        '''
+        c = max(target)
+        if prediction.shape == (target.shape[0],c):
+            #target must include the last class
+            raise ValueError("Target seems to have the wrong shape")
+        if min(target) < 0 or max(target) > c-1:
+            #target must include the last class
+            raise ValueError("Target seems to have the wrong shape")
 
-        pass
+        self.correct += (np.argmax(prediction,1) == target).sum()
+        self.total += prediction.shape[0]
+
 
     def __str__(self):
         '''
@@ -92,8 +104,7 @@ class Accuracy(PerformanceMeasure):
 
         # TODO implement
         # return something like "accuracy: 0.395"
-
-        pass
+        return "accuracy: {.3f}".format(self.correct/self.total)
 
     def __lt__(self, other) -> bool:
         '''
@@ -104,18 +115,19 @@ class Accuracy(PerformanceMeasure):
         # See https://docs.python.org/3/library/operator.html for how these
         # operators are used to compare instances of the Accuracy class
         # TODO implement
+        if type(self) != type(other):
+            raise TypeError()
+        return self.correct / self.total < other.correct / other.total
 
-        pass
 
     def __gt__(self, other) -> bool:
         '''
         Return true if this accuracy is better than another one.
         Raises TypeError if the types of both measures differ.
         '''
-
-        # TODO implement
-
-        pass
+        if type(self) != type(other):
+            raise TypeError()
+        return self.correct / self.total > other.correct / other.total
 
     def accuracy(self) -> float:
         '''
@@ -125,5 +137,6 @@ class Accuracy(PerformanceMeasure):
 
         # TODO implement
         # on this basis implementing the other methods is easy (one line)
-
-        pass
+        if self.total == 0:
+            return 0
+        return self.correct / self.total
