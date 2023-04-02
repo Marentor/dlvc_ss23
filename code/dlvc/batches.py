@@ -1,6 +1,8 @@
 import typing
 import numpy as np
 import random
+import math
+from collections import namedtuple
 
 
 from .dataset import Dataset
@@ -41,9 +43,8 @@ class BatchGenerator:
         Raises ValueError on invalid argument values, such as if num is > len(dataset).
         '''
 
-        # TODO implement
         self.batch_array = []
-        self.n_batches = len(dataset) // num
+        self.n_batches = math.ceil(len(dataset) / num)
         for n_batch in range(self.n_batches):
             try:
                 d = []
@@ -53,7 +54,9 @@ class BatchGenerator:
                 for i in range(num):
                     sample = dataset[n_batch*num + i]
                     if op:
-                        sample.data = op(sample.data)  # is sample immutable ?
+                        s = namedtuple('Sample', ['idx', 'data', 'label'])
+                        sample = s(sample.idx,op(sample.data),sample.label)
+                        #sample.data = op(sample.data)  # is sample immutable ?
                     d.append(sample.data)
                     l.append(sample.label)
                     idx.append(sample.idx)
@@ -62,10 +65,11 @@ class BatchGenerator:
                 l = []
                 idx = []
 
-                for i in range(num - (len(dataset) % num)):
+                for i in range(len(dataset) % num):
                     sample = dataset[n_batch*num + i]
                     if op:
-                        sample.data = op(sample.data)  # is sample immutable ?
+                        s = namedtuple('Sample', ['idx', 'data', 'label'])
+                        sample = s(sample.idx,op(sample.data),sample.label)
                     d.append(sample.data)
                     l.append(sample.label)
                     idx.append(sample.idx)
@@ -86,7 +90,6 @@ class BatchGenerator:
             This is identical to the total number of batches yielded every time the __iter__ method is called.
         '''
 
-        # TODO implement
         return self.n_batches
 
     def __iter__(self) -> typing.Iterable[Batch]:
@@ -94,10 +97,9 @@ class BatchGenerator:
         Iterate over the wrapped dataset, returning the data as batches.
         '''
 
-        # TODO implement
         # The "yield" keyword makes this easier
 
         for i in range(self.__len__()):
             yield self.batch_array[i]
 
-        pass
+

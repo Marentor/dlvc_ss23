@@ -23,7 +23,6 @@ def type_cast(dtype: np.dtype) -> Op:
     Cast numpy arrays to the given type.
     '''
 
-    # TODO implement (see above for guidance).
     def op(sample: np.ndarray) -> np.ndarray:
         sample = sample.astype(dtype)
         return sample
@@ -35,7 +34,6 @@ def vectorize() -> Op:
     Vectorize numpy arrays via "numpy.ravel()".
     '''
 
-    # TODO implement (see above for guidance).
     def op(sample: np.ndarray) -> np.ndarray:
         sample = np.ravel(sample)
         return sample
@@ -47,7 +45,6 @@ def add(val: float) -> Op:
     Add a scalar value to all array elements.
     '''
 
-    # TODO implement (see above for guidance).
     def op(sample: np.ndarray) -> np.ndarray:
         sample = sample + val
         return sample
@@ -60,7 +57,6 @@ def mul(val: float) -> Op:
     Multiply all array elements by the given scalar.
     '''
 
-    # TODO implement (see above for guidance).
     def op(sample: np.ndarray) -> np.ndarray:
         sample = sample * val
         return sample
@@ -72,7 +68,6 @@ def hwc2chw() -> Op:
     Flip a 3D array with shape HWC to shape CHW.
     '''
 
-    # TODO implement (see np.transpose)
     def op(sample: np.ndarray) -> np.ndarray:
         sample = np.transpose(sample,(3,1,2))
         return sample
@@ -84,7 +79,6 @@ def hflip() -> Op:
     Flip arrays with shape HWC horizontally with a probability of 0.5.
     '''
 
-    # TODO implement (numpy.flip will be helpful)
     def op(sample: np.ndarray) -> np.ndarray:
         if np.random.random(size=1) > 0.5:
             sample = np.flip(sample,1) #Does "flip horizontaly" mean flip at the width dimension ?
@@ -100,7 +94,6 @@ def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
     Raises ValueError if sz exceeds the array width/height after padding.
     '''
 
-    # TODO implement
     # https://numpy.org/doc/stable/reference/generated/numpy.pad.html will be helpful
     def op(sample: np.ndarray) -> np.ndarray:
         sample = np.pad(sample,pad,pad_mode)

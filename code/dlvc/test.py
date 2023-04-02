@@ -67,7 +67,6 @@ class Accuracy(PerformanceMeasure):
         '''
         Resets the internal state.
         '''
-
         self.correct = 0
         self.total = 0
 
@@ -80,7 +79,6 @@ class Accuracy(PerformanceMeasure):
         Raises ValueError if the data shape or values are unsupported.
         '''
 
-        # TODO change c
         '''
         Update the measure by comparing predicted data with ground-truth target data.
         Raises ValueError if the data shape or values are unsupported.
@@ -89,7 +87,7 @@ class Accuracy(PerformanceMeasure):
         if prediction.shape == (target.shape[0],c):
             #target must include the last class
             raise ValueError("Target seems to have the wrong shape")
-        if min(target) < 0 or max(target) > c-1:
+        if min(target) < 0 or max(target) > c-1: #doesnt realy make sense but there is now way to get c
             #target must include the last class
             raise ValueError("Target seems to have the wrong shape")
 
@@ -102,7 +100,6 @@ class Accuracy(PerformanceMeasure):
         Return a string representation of the performance.
         '''
 
-        # TODO implement
         # return something like "accuracy: 0.395"
         return "accuracy: {.3f}".format(self.correct/self.total)
 
@@ -114,7 +111,6 @@ class Accuracy(PerformanceMeasure):
 
         # See https://docs.python.org/3/library/operator.html for how these
         # operators are used to compare instances of the Accuracy class
-        # TODO implement
         if type(self) != type(other):
             raise TypeError()
         return self.correct / self.total < other.correct / other.total
