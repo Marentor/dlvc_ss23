@@ -58,7 +58,7 @@ class BatchGenerator:
                         sample = s(sample.idx,op(sample.data),sample.label)
                         #sample.data = op(sample.data)  # is sample immutable ?
                     d.append(sample.data)
-                    l.append(sample.label)
+                    l.append(np.int64(sample.label))
                     idx.append(sample.idx)
             except IndexError:
                 d = []
@@ -71,7 +71,7 @@ class BatchGenerator:
                         s = namedtuple('Sample', ['idx', 'data', 'label'])
                         sample = s(sample.idx,op(sample.data),sample.label)
                     d.append(sample.data)
-                    l.append(sample.label)
+                    l.append(np.int64(sample.label))
                     idx.append(sample.idx)
 
             batch = Batch()

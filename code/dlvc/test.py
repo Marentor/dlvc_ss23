@@ -83,12 +83,11 @@ class Accuracy(PerformanceMeasure):
         Update the measure by comparing predicted data with ground-truth target data.
         Raises ValueError if the data shape or values are unsupported.
         '''
-        c = max(target)
-        if prediction.shape == (target.shape[0],c):
+        c = max(target) + 1
+        if prediction.shape != (target.shape[0],c):
             #target must include the last class
-            raise ValueError("Target seems to have the wrong shape")
-        if min(target) < 0 or max(target) > c-1: #doesnt realy make sense but there is now way to get c
-            #target must include the last class
+            raise ValueError("Target or prediction seem to have the wrong shape")
+        if min(target) < 0 or max(target) > prediction.shape[1]-1: #doesn't really make sense but there is no way to get c
             raise ValueError("Target seems to have the wrong shape")
 
         self.correct += (np.argmax(prediction,1) == target).sum()
@@ -101,7 +100,7 @@ class Accuracy(PerformanceMeasure):
         '''
 
         # return something like "accuracy: 0.395"
-        return "accuracy: {.3f}".format(self.correct/self.total)
+        return "accuracy: {0:.3f}".format(self.correct/self.total)
 
     def __lt__(self, other) -> bool:
         '''
@@ -130,8 +129,6 @@ class Accuracy(PerformanceMeasure):
         Compute and return the accuracy as a float between 0 and 1.
         Returns 0 if no data is available (after resets).
         '''
-
-        # TODO implement
         # on this basis implementing the other methods is easy (one line)
         if self.total == 0:
             return 0
