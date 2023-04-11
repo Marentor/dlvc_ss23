@@ -1,9 +1,11 @@
-import dlvc.ops as ops
 import numpy as np
 import torch
-from src.dlvc.test import Accuracy
-from src.dlvc.batches import BatchGenerator
-from src.dlvc.datasets.pets import PetsDataset
+
+from dlvc import ops
+from dlvc.batches import BatchGenerator
+from dlvc.datasets.pets import PetsDataset
+from dlvc.test import Accuracy
+
 
 class LinearClassifier(torch.nn.Module):
     def __init__(self, input_dim, num_classes):
@@ -23,9 +25,13 @@ op = ops.chain([
     ops.mul(1 / 127.5),
 ])
 
-train = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py", 1)
-val = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py", 2)
-test = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py", 3)
+# train = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py", 1)
+# val = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py", 2)
+# test = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py", 3)
+
+train = PetsDataset("cifar-10-batches-py", 1)
+val = PetsDataset("cifar-10-batches-py", 2)
+test = PetsDataset("cifar-10-batches-py", 3)
 
 gen_train = BatchGenerator(dataset=train, num=len(train), shuffle=True, op=op)
 gen_val = BatchGenerator(dataset=val, num=len(val), shuffle=True, op=op)
