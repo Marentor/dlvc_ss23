@@ -1,10 +1,9 @@
 import dlvc.ops as ops
 import numpy as np
 import torch
-from code.dlvc.test import Accuracy
-from code.dlvc.batches import BatchGenerator
-from code.dlvc.datasets.pets import PetsDataset
-
+from src.dlvc.test import Accuracy
+from src.dlvc.batches import BatchGenerator
+from src.dlvc.datasets.pets import PetsDataset
 
 class LinearClassifier(torch.nn.Module):
     def __init__(self, input_dim, num_classes):
@@ -74,9 +73,7 @@ for test_batch in gen_test:
     acc = Accuracy()
     acc.update(output.detach().numpy(), test_batch.label)
 print("BEST MODEL\nValidation accuracy {val}\nTest accuracy: {test}".format(val=max(all_val_acc),test=acc.accuracy()))
-
-
-
-
-
-
+#export_dic = {"final_test_acc":acc.accuracy(),"all_val_acc":all_val_acc }
+#with open('results.csv', 'w') as csvfile:
+ #   for key in export_dic.keys():
+  #      csvfile.write("%s, %s\n" % (key, export_dic[key]))

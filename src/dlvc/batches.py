@@ -56,10 +56,12 @@ class BatchGenerator:
                     if op:
                         s = namedtuple('Sample', ['idx', 'data', 'label'])
                         sample = s(sample.idx,op(sample.data),sample.label)
-                        #sample.data = op(sample.data)  # is sample immutable ?
+
                     d.append(sample.data)
                     l.append(np.int64(sample.label))
                     idx.append(sample.idx)
+
+
             except IndexError:
                 d = []
                 l = []
@@ -74,10 +76,22 @@ class BatchGenerator:
                     l.append(np.int64(sample.label))
                     idx.append(sample.idx)
 
+
+
+            d = np.array(d)
+            l = np.array(l)
+            idx = np.array(idx)
+            if shuffle:
+                perm = np.random.permutation(len(d))
+
+                # shuffle the arrays using the same permutation
+                d = d[perm]
+                l = l[perm]
+                idx =idx[perm]
             batch = Batch()
-            batch.data = np.array(d)
-            batch.label = np.array(l)
-            batch.idx = np.array([idx])
+            batch.data = d
+            batch.label = l
+            batch.idx = idx
             self.batch_array.append(batch)
             if shuffle:
                 random.shuffle(self.batch_array)
