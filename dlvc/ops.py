@@ -69,7 +69,7 @@ def hwc2chw() -> Op:
     '''
 
     def op(sample: np.ndarray) -> np.ndarray:
-        sample = np.transpose(sample,(3,1,2))
+        sample = np.transpose(sample,(2,0,1))
         return sample
 
     return op
