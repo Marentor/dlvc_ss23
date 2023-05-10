@@ -1,9 +1,9 @@
 import os
 from collections import namedtuple
 
-import cv2
 import numpy as np
 import torch
+import cv2
 
 # A 2D vector. Used in Fn as an evaluation point.
 Vec2 = namedtuple('Vec2', ['x1', 'x2'])
@@ -55,9 +55,10 @@ class Fn:
         Use the result to visualize the progress of gradient descent.
         '''
 
-        # TODO implement
+        cmap = cv2.applyColorMap(self.fn ,cv2.COLORMAP_JET)
+        cv2.imshow('image',cmap)
 
-        pass
+
 
     def __call__(self, loc: Vec2) -> float:
         '''
@@ -65,11 +66,11 @@ class Fn:
         Raises ValueError if loc is out of bounds.
         '''
 
-        # TODO implement
+
         # You can simply round and map to integers. If so, make sure not to set eps and learning_rate too low
         # Alternatively, you can implement some form of interpolation (for example bilinear)
 
-        pass
+
 
     def grad(self, loc: Vec2) -> Vec2:
         '''
@@ -77,9 +78,12 @@ class Fn:
         Raises ValueError if loc is out of bounds of fn or if eps <= 0.
         '''
 
-        # TODO implement
+        if not all(0 <= x < s for x, s in zip(loc, fn.shape)):
+            raise ValueError("Location is out of bounds of the function.")
+        if self.eps <= 0:
+            raise ValueError("Epsilon must be positive.")
 
-        pass
+
 
 if __name__ == '__main__':
     # Parse args
