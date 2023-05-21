@@ -83,43 +83,44 @@ class Cat_and_dog_classifier(nn.Module):
         out = self.linear(out)
         return out
 
-train = PetsDataset("cifar-10-batches-py", 1)
-val = PetsDataset("cifar-10-batches-py", 2)
-test = PetsDataset("cifar-10-batches-py", 3)
-size_of_batch=128
-gen_train = BatchGenerator(dataset=train, num=size_of_batch, shuffle=True, op=op)
-gen_val = BatchGenerator(dataset=val, num=size_of_batch, shuffle=True, op=op)
-gen_test = BatchGenerator(dataset=test, num=size_of_batch, shuffle=True, op=op)
+if __name__ == "__main__":
+    train = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py\\", 1)
+    val = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py\\", 2)
+    test = PetsDataset(r"C:\Users\hp\Documents\Uni\Master\Semester_4\VCDL\cifar-10-batches-py\\", 3)
+    size_of_batch=128
+    gen_train = BatchGenerator(dataset=train, num=size_of_batch, shuffle=True, op=op)
+    gen_val = BatchGenerator(dataset=val, num=size_of_batch, shuffle=True, op=op)
+    gen_test = BatchGenerator(dataset=test, num=size_of_batch, shuffle=True, op=op)
 
-best_val_acc = 0
-all_val_acc = []
+    best_val_acc = 0
+    all_val_acc = []
 
-best_model = None
-clf = CnnClassifier(Cat_and_dog_classifier(), (0, 32, 32, 3), 2, 0.01, 0)
-use_cuda = torch.cuda.is_available()
-device = torch.device("cuda:0" if use_cuda else "cpu")
-clf.net.to(device)
-for epoch in range(100):
-    losses=[]
-    for batch in gen_train:
-        loss = (clf.train(batch.data, batch.label))
-        losses.append(loss)
+    best_model = None
+    clf = CnnClassifier(Cat_and_dog_classifier(), (0, 32, 32, 3), 2, 0.01, 0)
+    use_cuda = torch.cuda.is_available()
+    device = torch.device("cuda:0" if use_cuda else "cpu")
+    clf.net.to(device)
+    for epoch in range(100):
+        losses=[]
+        for batch in gen_train:
+            loss = (clf.train(batch.data, batch.label))
+            losses.append(loss)
 
-    for val_batch in gen_val:
-        output = clf.predict(val_batch.data)
+        for val_batch in gen_val:
+            output = clf.predict(val_batch.data)
+            acc = Accuracy()
+            acc.update(output.detach().numpy(),val_batch.label)
+            all_val_acc.append(acc.accuracy())
+            if acc.accuracy() > best_val_acc:
+                best_model = clf.net.state_dict()
+
+        losses=np.array(losses)
+        print(f"Epoch: {epoch} \nTrain loss: {np.mean(losses)} + mean:{np.std(losses)} \nValidation accuracy {acc.accuracy()}\n")
+
+    model = CnnClassifier(Cat_and_dog_classifier(), (0, 32, 32, 3), 2, 0.01, 0)
+    model.net.load_state_dict(best_model)
+    for test_batch in gen_test:
+        output = model.predict(test_batch.data)
         acc = Accuracy()
-        acc.update(output.detach().numpy(),val_batch.label)
-        all_val_acc.append(acc.accuracy())
-        if acc.accuracy() > best_val_acc:
-            best_model = clf.net.state_dict()
-
-    losses=np.array(losses)
-    print(f"Epoch: {epoch} \nTrain loss: {np.mean(losses)} + mean:{np.std(losses)} \nValidation accuracy {acc.accuracy()}\n")
-
-model = CnnClassifier(Cat_and_dog_classifier(), (0, 32, 32, 3), 2, 0.01, 0)
-model.net.load_state_dict(best_model)
-for test_batch in gen_test:
-    output = model.predict(test_batch.data)
-    acc = Accuracy()
-    acc.update(output.detach().numpy(), test_batch.label)
-print("BEST MODEL\nValidation accuracy {val}\nTest accuracy: {test}".format(val=max(all_val_acc),test=acc.accuracy()))
+        acc.update(output.detach().numpy(), test_batch.label)
+    print("BEST MODEL\nValidation accuracy {val}\nTest accuracy: {test}".format(val=max(all_val_acc),test=acc.accuracy()))

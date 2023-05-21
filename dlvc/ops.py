@@ -6,6 +6,7 @@ import numpy as np
 # See https://docs.python.org/3/library/typing.html#typing.Callable for what this line means
 Op = Callable[[np.ndarray], np.ndarray]
 
+
 def chain(ops: List[Op]) -> Op:
     '''
     Chain a list of operations together.
@@ -18,6 +19,7 @@ def chain(ops: List[Op]) -> Op:
 
     return op
 
+
 def type_cast(dtype: np.dtype) -> Op:
     '''
     Cast numpy arrays to the given type.
@@ -29,6 +31,7 @@ def type_cast(dtype: np.dtype) -> Op:
 
     return op
 
+
 def vectorize() -> Op:
     '''
     Vectorize numpy arrays via "numpy.ravel()".
@@ -39,6 +42,7 @@ def vectorize() -> Op:
         return sample
 
     return op
+
 
 def add(val: float) -> Op:
     '''
@@ -63,16 +67,18 @@ def mul(val: float) -> Op:
 
     return op
 
+
 def hwc2chw() -> Op:
     '''
     Flip a 3D array with shape HWC to shape CHW.
     '''
 
     def op(sample: np.ndarray) -> np.ndarray:
-        sample = np.transpose(sample,(2,0,1))
+        sample = np.transpose(sample, (2, 0, 1))
         return sample
 
     return op
+
 
 def hflip() -> Op:
     '''
@@ -81,10 +87,11 @@ def hflip() -> Op:
 
     def op(sample: np.ndarray) -> np.ndarray:
         if np.random.random(size=1) > 0.5:
-            sample = np.flip(sample,1) #Does "flip horizontaly" mean flip at the width dimension ?
+            sample = np.flip(sample, 1)  # Does "flip horizontaly" mean flip at the width dimension ?
         return sample
 
     return op
+
 
 def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
     '''
@@ -96,8 +103,8 @@ def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
 
     # https://numpy.org/doc/stable/reference/generated/numpy.pad.html will be helpful
     def op(sample: np.ndarray) -> np.ndarray:
-        sample = np.pad(sample,pad,pad_mode)
-        if (sample.shape[0] > sz or sample.shape[1] > sz):
+        sample = np.pad(sample, ((pad, pad), (pad, pad), (0, 0)), pad_mode)
+        if (sample.shape[0] < sz or sample.shape[1] < sz):
             raise ValueError
 
         idx_height = np.random.randint(0, sample.shape[0] - sz)
